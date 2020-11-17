@@ -1,0 +1,23 @@
+{
+  "name": "simple-sample-crud",
+  "version": "1.0.0",
+  "description": "create, update, delete",
+  "main": "app/main.js",
+  "scripts": {
+    "dev": "nodemon -r dotenv-flow/config"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "bookshelf": "^1.2.0",
+    "dotenv-flow": "^3.2.0",
+    "express": "^4.17.1",
+    "knex": "^0.21.12",
+    "morgan": "^1.10.0",
+    "sqlite3": "^5.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
