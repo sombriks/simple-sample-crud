@@ -4,7 +4,7 @@ const Profissional = require("./profissional");
 
 const Unidade = bookshelf.model("Unidade", {
   tableName: "unidade",
-  profissionais() {
+  profissionais() {// pra usar no withRelated
     return this.hasMany(Profissional);
   },
 });

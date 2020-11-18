@@ -1,1 +1,103 @@
-<h1>hello</h1>
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>simple crud</title>
+    <link rel="stylesheet" href="index.css" />
+    <script src="axios.min.js"></script>
+    <script src="vue.min.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <div class="caixa">
+        <h1>Unidades</h1>
+        <input v-model="unidade.nome" />
+        <button @click="addUnidade">+</button>
+        <div class="linha" v-for="un in unidades" @click="selUnidade(un)">
+          <span>{{un.nome}}</span><button @click="delUnidade(un)">-</button>
+        </div>
+      </div>
+      <div class="caixa">
+        <h1>Profissionais</h1>
+        <input :disabled="!unidade.id" v-model="profissional.nome" />
+        <button @click="addProfissional" :disabled="!unidade.id">+</button>
+        <div
+          class="linha"
+          v-for="pr in profissionais"
+          @click="profissional = pr"
+        >
+          <span>{{pr.nome}}</span
+          ><button @click="delProfissional(pr)">-</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      const app = new Vue({
+        el: "#app",
+        mounted() {
+          this.listUnidades().then(this.listProfissionais);
+        },
+        data: {
+          unidade: { nome: "", id: undefined },
+          profissional: { nome: "", id: undefined, unidade_id: undefined },
+          unidades: [],
+          profissionais: [],
+        },
+        methods: {
+          addUnidade() {
+            const { id, nome } = this.unidade;
+            return axios.post("/unidades", { id, nome }).then((ret) => {
+              this.unidade = { nome: "", id: undefined };
+              this.listUnidades().then(this.listProfissionais);
+            });
+          },
+          addProfissional() {
+            this.profissional.unidade_id = this.unidade.id;
+            return axios
+              .post("/profissionais", this.profissional)
+              .then((ret) => {
+                this.profissional = {
+                  nome: "",
+                  id: undefined,
+                  unidade_id: undefined,
+                };
+                this.listUnidades().then(this.listProfissionais);
+              });
+          },
+          listUnidades() {
+            return axios.get("/unidades").then((ret) => {
+              this.unidades = ret.data;
+            });
+          },
+          listProfissionais() {
+            let params = {};
+            if (this.unidade.id) params.unidade_id = this.unidade.id;
+            return axios.get("/profissionais", { params }).then((ret) => {
+              this.profissionais = ret.data;
+            });
+          },
+          selUnidade(un) {
+            this.unidade = un;
+            if (un.profissionais) this.profissionais = un.profissionais;
+          },
+          // selProfissional
+          delUnidade(un) {
+            axios.delete(`/unidades/${un.id}`).then((_) => {
+              this.unidade = { nome: "", id: undefined };
+              this.listUnidades().then(this.listProfissionais);
+            });
+          },
+          delProfissional(pr) {
+            axios.delete(`/profissionais/${pr.id}`).then((_) => {
+              this.profissional = {
+                nome: "",
+                id: undefined,
+                unidade_id: undefined,
+              };
+              this.listUnidades().then(this.listProfissionais);
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

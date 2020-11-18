@@ -1,0 +1,33 @@
+#app {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+#app > .caixa {
+  border: 1px solid black;
+  min-width: 300px;
+  min-height: 400px;
+  max-width: 400px;
+  max-height: 500px;
+  margin: 10px;
+}
+
+#app > .caixa > h1, #app > .caixa > input {
+  margin: 5px;
+}
+
+#app > .caixa > .linha {
+  margin: 7px;
+  display: flex;
+}
+
+#app > .caixa > .linha > span {
+  flex-grow: 1;
+}
+
+#app > .caixa > .linha:hover {
+  background-color: beige;
+}
+ 
